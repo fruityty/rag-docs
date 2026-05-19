@@ -7,7 +7,7 @@ from openai import OpenAI
 from backend.config import get_settings
 
 
-SUPPORTED_EXTENSIONS = {".txt", ".md"}
+SUPPORTED_EXTENSIONS = {".txt", ".md", ".mdx"}
 CHUNK_SIZE = 1_000
 CHUNK_OVERLAP = 200
 
@@ -100,4 +100,3 @@ def ingest() -> None:
 
 if __name__ == "__main__":
     ingest()
-

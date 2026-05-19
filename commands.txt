@@ -1,0 +1,99 @@
+RAG project commands
+
+1. Activate virtual environment
+
+```powershell
+env\Scripts\activate
+```
+
+Use this before running Python commands so your project uses the packages installed in the local `env` folder.
+
+2. Install dependencies
+
+```powershell
+pip install -r requirements.txt
+```
+
+Installs FastAPI, ChromaDB, OpenAI SDK, and the other packages needed by the project.
+
+3. Create environment file
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Creates your local `.env` file. After this, edit `.env` and set `OPENAI_API_KEY` to your real OpenAI API key.
+
+4. Add documents
+
+```powershell
+data\docs
+```
+
+Put your `.txt`, `.md`, or `.mdx` files in this folder. These files become the knowledge base for the RAG system.
+
+5. Add an external docs repo, example Docker docs
+
+```powershell
+New-Item -ItemType Directory -Force data\docs\external
+git clone https://github.com/docker/docs.git data\docs\external\docker-docs
+```
+
+Clones the Docker documentation repo into your RAG document folder. The ingestion script scans nested folders, so Markdown files inside the repo can be indexed.
+
+6. Update an external docs repo later
+
+```powershell
+git -C data\docs\external\docker-docs pull
+```
+
+Pulls the latest Docker docs changes. After pulling, run the ingestion command again so the vector database matches the updated files.
+
+7. Test loading a small docs folder with LangChain
+
+```powershell
+pip install langchain-community
+python load_docs.py
+```
+
+Loads Markdown and MDX files from `data\docs\external\docker-docs\content\get-started` and prints the number of loaded documents. This is useful for testing a small folder before indexing the whole docs repo.
+
+8. Build the vector index
+
+```powershell
+python -m backend.ingest
+```
+
+Reads files from `data\docs`, splits them into chunks, creates embeddings, and stores them in the local Chroma database.
+
+9. Start the app
+
+```powershell
+uvicorn backend.main:app --reload
+```
+
+Starts the FastAPI server. The `--reload` flag restarts the server automatically when you edit backend code.
+
+10. Open the chat UI
+
+```text
+http://127.0.0.1:8000
+```
+
+Open this URL in your browser and ask questions about your indexed documents.
+
+11. Re-index after changing documents
+
+```powershell
+python -m backend.ingest
+```
+
+Run this again whenever you add, remove, or edit files in `data\docs`.
+
+12. Deactivate virtual environment
+
+```powershell
+deactivate
+```
+
+Leaves the local virtual environment when you are done working.
