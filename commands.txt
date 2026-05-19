@@ -97,3 +97,13 @@ deactivate
 ```
 
 Leaves the local virtual environment when you are done working.
+
+13. Connect this project to GitHub
+
+```powershell
+git remote add origin https://github.com/fruityty/rag-docs.git
+git branch -M main
+git push -u origin main
+```
+
+Adds the GitHub repository as `origin`, renames the local branch to `main`, and pushes the project to GitHub.
